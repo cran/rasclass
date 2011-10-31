@@ -23,6 +23,11 @@ prototype = list(ncols = NULL, nrows = NULL, xllcorner = NULL, yllcorner = NULL,
 ##################################################################################
 # Set Class: rasclass
 ##################################################################################
+setOldClass('multinom')
+setOldClass('mlp')
+setOldClass('svm.formula')
+setOldClass('randomForest.formula')
+
 setClass('rasclass',
 
 representation(
@@ -30,26 +35,44 @@ representation(
 path = 'character',
 data = 'data.frame',
 samplename = 'character',
-call = 'formula',
-method = 'character',
+formula = 'character',
+call = 'call',
 
-# Memory saving
+# Memory saving skeleton
 gridSkeleton = 'rasclassRaster',
+
+# Training vector for splitfraction
+training = 'logical',
+
+# Reconstruction type specifics
+maximumLikelihood = 'list',
+randomForest = 'randomForest.formula',
+logit = 'multinom',
+neuralNetwork = 'mlp',
+supportVector = 'svm.formula',
 
 # Predicted Variables
 predictedGrid = 'rasclassRaster',
 
-# Multinom specifics
-coefficients = 'matrix',
-anova = 'data.frame',
-
 # Accuracy and reconstruction statistics
-kappa = 'numeric',
-accuracy = 'matrix'),
+overallAccuracy = 'numeric',
+accuracyMatrix = 'matrix',
+kappa = 'numeric'),
 
 prototype = list(
-path = NULL, data = NULL, samplename = NULL, call = NULL, method = NULL,
+path = NULL,
+data = NULL,
+samplename = NULL,
+formula = NULL,
+call = NULL,
 gridSkeleton = new('rasclassRaster'),
+training = NULL,
+maximumLikelihood = NULL,
+randomForest = NULL,
+logit = NULL,
+neuralNetwork = NULL,
+supportVector = NULL,
 predictedGrid = new('rasclassRaster'),
-coefficients = NULL, anova = NULL,
-kappa = NULL, accuracy = NULL))
+overallAccuracy = NULL,
+accuracyMatrix = NULL,
+kappa = NULL))

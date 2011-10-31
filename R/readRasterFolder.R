@@ -8,7 +8,7 @@ setMethod('readRasterFolder', signature(path = 'character'),
 function(path, samplename = 'sample', filenames = NULL, object = new('rasclass'),  asInteger = FALSE){
 
 	# Clean and store samplename
-	if(substr(samplename, nchar(samplename)-3, nchar(samplename)) == ".asc"){
+	if(substr(samplename, nchar(samplename)-3, nchar(samplename)) == '.asc'){
 		samplename <- substr(samplename, 1, nchar(samplename)-4)
 	}
 	object@samplename <- samplename
@@ -22,21 +22,26 @@ function(path, samplename = 'sample', filenames = NULL, object = new('rasclass')
 	# Read Variable Names
 	if(length(filenames) == 0){
 		filelist <- Sys.glob(paste(path, '*.asc', sep=''))
-		filelist <- filelist[filelist != paste(paste(path, object@samplename, sep=''), '.asc' , sep='')]
+		filelist <- filelist[filelist != paste(path, object@samplename, '.asc' , sep='')]
 	}
 	else{
 		filelist <- NA
 		for(i in 1:length(filenames)){
-			filelist[i] <- paste(paste(path, filenames[i], sep=''), '.asc', sep='')
+			file <- filenames[i]
+			if(substr(file, nchar(file)-3, nchar(file)) == '.asc'){
+				filelist[i] <- paste(path, file, sep='')
+			} else {
+				filelist[i] <- paste(path, file, '.asc', sep='')
+			}
 		}
 	}
-	namelist <- rep("",length(filelist))
+	namelist <- rep('', length(filelist))
 	namelist[1] <- substr(filelist[1], nchar(path), nchar(filelist[1])-4)
 	
 	# Load Sample
 	cat('\nReading Raster grids...\n')
 	cat(paste(paste(path,object@samplename,sep=''),'.asc',sep=''), '\n')
-	thissample  <- readRaster(paste(paste(path,object@samplename,sep=''),'.asc',sep=''), asInteger = asInteger)
+	thissample  <- readRaster(paste(path, object@samplename, '.asc', sep=''), asInteger = asInteger)
 	object@data <- data.frame(thissample@grid)
 	
 	# Set gridSkeleton headers

@@ -29,25 +29,26 @@ A \code{\link{rasclassRaster}} object.
 }
 
 \seealso{
-\code{\link{accuracyAssessment}},
-\code{\link{buildFormula}},
-\code{\link{checkRasclass}},
-\code{\link{classifyMLC}},
-\code{\link{classifyMlogit}},
+\code{\link{rasclass-package}},
 \code{\link{rasclass-class}},
 \code{\link{rasclassRaster-class}},
-\code{\link{readRaster}},
+
+\code{\link{writeRaster}},
+
 \code{\link{readRasterFolder}},
 \code{\link{setRasclassData}},
-\code{\link{writeRaster}}
+
+\code{\link{buildFormula}},
+\code{\link{checkRasclass}},
+
+\code{\link{rasclassMlc}},
+\code{\link{classifyRasclass}}
 }
 
 \examples{
 \dontrun{
 myraster <- readRaster(path = "mypath", asInteger = FALSE)
-image(myraster)
-}
-}
+image(myraster)}}
 
 \references{
 ESRI ASCII raster format definition.

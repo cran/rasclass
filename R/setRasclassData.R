@@ -1,11 +1,11 @@
 ##################################################################################
 # Set Method: setRasclassData
 ##################################################################################
-setRasclassData <- function(newdata, object, ncols = NA, nrows = NA, xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = -9999, samplename = 'sample'){}
+setRasclassData <- function(newdata, object = new('rasclass'), ncols = NA, nrows = NA, xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = -9999, samplename = 'sample'){}
 
-setMethod('setRasclassData', signature(newdata = 'data.frame', object = 'rasclass'),
+setMethod('setRasclassData', signature(newdata = 'data.frame'),
 
-function(newdata, object, ncols = NA, nrows = NA, xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = -9999, samplename = 'sample'){
+function(newdata, object = new('rasclass'), ncols = NA, nrows = NA, xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = -9999, samplename = 'sample'){
 	
 	# Set path
 	object@path <- 'Data specified manually using setRasclassData()'
@@ -34,6 +34,9 @@ function(newdata, object, ncols = NA, nrows = NA, xllcorner = NA, yllcorner = NA
 	
 	# Remove NAs and set data
 	object@data <- newdata[as.logical(object@gridSkeleton@grid), ]
+	
+	# Convert sample to factor
+	object@data[, object@samplename] <- factor(object@data[, object@samplename])
 	
 	# Build Formula
 	object <- buildFormula(object)

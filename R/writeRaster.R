@@ -6,7 +6,6 @@ setMethod('writeRaster', signature(object = 'rasclassRaster'),
 
 function(object, path = 'predictedGrid.asc'){
 	
-	
 	temp <- paste('ncols         ', object@ncols)
 	temp <- append(temp, paste('nrows         ', object@nrows))
 	temp <- append(temp, paste('xllcorner     ', object@xllcorner))
@@ -14,22 +13,15 @@ function(object, path = 'predictedGrid.asc'){
 	temp <- append(temp, paste('cellsize      ', object@cellsize))
 	temp <- append(temp, paste('NODATA_value  ', object@NAvalue))
 
-	counter = 1
+	allrows <- split(object@grid, rep(1:object@ncols,each=object@nrows))
+	allrows <- sapply(allrows, function(x) {
+		x[is.na(x)] <- object@NAvalue
+		x <- paste(x, collapse = ' ')
+		x
+		})
 
-	for(i in 1:object@nrows){
-		# Go through rows taking the NA values into account
-		temprow <- NA
-		for(j in 1:object@ncols){
-
-			if(is.na(object@grid[j + (i-1)*object@ncols])){
-				temprow[j] <- object@NAvalue
-			}
-			else {
-				temprow[j] <- object@grid[j + (i-1)*object@ncols]
-			}
-		}
-		temp <- append(temp, paste(temprow, collapse = ' '))
-	}
+	temp <- c(temp, allrows)
+	
 	writeLines(temp, con = path)
 }
 )

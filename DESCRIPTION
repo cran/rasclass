@@ -1,21 +1,14 @@
 Package: rasclass
 Type: Package
 Title: Supervised Raster Image Classification
-Version: 0.1.0
-Date: 2011-08-22
-Author: Daniel Wiesmann <daniel.wiesmann@ist.utl.pt> and David Quinn
-        <djq@mit.edu>
+Version: 0.2.0
+Date: 2011-10-31
+Author: Daniel Wiesmann <daniel.wiesmann@ist.utl.pt> and David Quinn <djq@mit.edu>
 Maintainer: Daniel Wiesmann <daniel.wiesmann@ist.utl.pt>
-Description: This package contains functions to perform supervised and
-        pixel based raster image classification. It can be used for
-        land-cover analysis in a straightforward way. Two
-        classification algorithms are implemented: a classifier using
-        Multinomial Logistic Regression and a Maximum Likelihood
-        Classifier (MLC). The output includes the classified raster and
-        standard classification accuracy assessment.
+Description: This package contains functions to perform supervised and pixel based raster image classification. It has been designed to facilitate land-cover analysis. Five classification algorithms can be used: Maximum Likelihood Classification, Multinomial Logistic Regression, Neural Networks, Random Forests and Support Vector Machines. The output includes the classified raster and standard classification accuracy assessment (accuracy matrix, overall accuracy and kappa coefficient). An option for in-sample verification is available.
 License: GPL (>= 2)
 LazyLoad: yes
-Depends: methods, nnet, car
-Packaged: 2011-08-22 14:13:56 UTC; Tam
+Imports: methods, car, nnet, RSNNS, e1071, randomForest
+Packaged: 2011-11-03 09:23:44 UTC; Tam
 Repository: CRAN
-Date/Publication: 2011-08-22 19:47:52
+Date/Publication: 2011-11-03 12:32:20

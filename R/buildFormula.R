@@ -13,7 +13,7 @@ function(object, varlist = NULL){
 		stop('please load data into the rasclass object')
 	}
 
-	logitFormula = paste(object@samplename, ' ~ ')
+	logitFormula = paste(object@samplename, ' ~ ', sep = '')
 
 	# Add variables to the formula
 	if(is.null(varlist)){
@@ -29,10 +29,10 @@ function(object, varlist = NULL){
 		}		
 	}
 	
-	object@call <- as.formula(substr(logitFormula, 0 , nchar(logitFormula)-3))
+	object@formula <- substr(logitFormula, 0 , nchar(logitFormula)-3)
 	
 	cat('Built Formula: ')
-	print(object@call, showEnv = FALSE)
+	show(object@formula)
 
 	object
 }

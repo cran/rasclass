@@ -1,13 +1,13 @@
 \name{setRasclassData}
 \alias{setRasclassData}
-\alias{setRasclassData,data.frame,rasclass-method}
+\alias{setRasclassData,data.frame-method}
 \title{Add data from dataframe to rasclass object}
 
 \description{
 This function adds data from a dataframe to an existing \code{\link{rasclass-class}} object.
 }
 
-\usage{setRasclassData(newdata, object, ncols = NA, nrows = NA,
+\usage{setRasclassData(newdata, object = new('rasclass'), ncols = NA, nrows = NA,
 	xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = -9999,
 	samplename = 'sample')}
 
@@ -16,7 +16,7 @@ This function adds data from a dataframe to an existing \code{\link{rasclass-cla
 	A data frame containing raster cell values in its columns.
 	}
 	\item{object}{
-	A rasclass object where the data should be updated to.
+	An optional rasclass object where the data should be updated to, a new object is created if not specified.
 	}
 	\item{ncols}{
 	The number of columns of the raster grid. Optional if the values are already specified in the rasclass object.
@@ -55,42 +55,40 @@ The data in the input dataframe is assumed to be from raster files with the same
 The \code{setRasclassData} function only keeps track of data raster cells that have an observed value (non-\code{NA}) in every column of the input dataframe provided.  The resulting grid structure will be retained in the gridSkeleton slot.}
 
 \seealso{
-\code{\link{accuracyAssessment}},
-\code{\link{buildFormula}},
-\code{\link{checkRasclass}},
-\code{\link{classifyMLC}},
-\code{\link{classifyMlogit}},
+\code{\link{rasclass-package}},
 \code{\link{rasclass-class}},
 \code{\link{rasclassRaster-class}},
+
 \code{\link{readRaster}},
+\code{\link{writeRaster}},
+
 \code{\link{readRasterFolder}},
-\code{\link{setRasclassData}},
-\code{\link{writeRaster}}
+
+\code{\link{buildFormula}},
+\code{\link{checkRasclass}},
+
+\code{\link{rasclassMlc}},
+\code{\link{classifyRasclass}}
 }
+
 
 \examples{
-# For this example, create data from a random dataframe
-mysample <- sample(c(NA, 1, 2, 3), 20000, rep = TRUE)
-red <- sample(c(NA,1:255), 20000, rep = TRUE)
-green <- sample(c(NA,1:255), 20000, rep = TRUE)
-blue <- sample(c(NA,1:255), 20000, rep = TRUE)
-newdata <- data.frame(mysample,red,green,blue)
+# For this example, create artificial data
+mysample <- c(rep(rep(c(1,2), each = 25), 25), rep(rep(c(3,4), each = 25), 25))
+mysample <- mysample + sample(c(0, NA), 2500, replace = TRUE, prob = c(1, 10))
+myvar1 <- rep(1:50, each = 50) + rnorm(2500, 0, 5)
+myvar2 <- rep(rep(1:50), 50) + rnorm(2500, 0, 5)
+newdata <- data.frame(mysample, myvar1, myvar2)
 
-# Prepare object using the dataframe and specifying raster properties
+# Prepare a rasclass object using the dataframe and specifying raster properties
 object <- new('rasclass')
-object <- setRasclassData(newdata, object, ncols = 100, nrows = 200,
-	xllcorner = 0, yllcorner = 0, cellsize = 10, NAvalue = -9999,
+object <- setRasclassData(newdata, ncols = 50, nrows = 50,
+	xllcorner = 0, yllcorner = 0, cellsize = 1, NAvalue = -9999,
 	samplename = 'mysample')
 
-# Classify and compute accuracy
-object <- classifyMlogit(object, anova = TRUE)
-object <- accuracyAssessment(object)
-
-# Summarize and plot results
+# Summarize the rasclass object
 summary(object)
-image(object@predictedGrid)
 }
 
-\keyword{raster classification}
-\keyword{landcover}
-\keyword{x}
+\keyword{rasclass}
+\keyword{data}
