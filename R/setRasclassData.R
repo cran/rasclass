@@ -1,11 +1,11 @@
 ##################################################################################
 # Set Method: setRasclassData
 ##################################################################################
-setRasclassData <- function(newdata, object = new('rasclass'), ncols = NA, nrows = NA, xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = -9999, samplename = 'sample'){}
+setRasclassData <- function(newdata, object = new('rasclass'), ncols = NA, nrows = NA, xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = NA, samplename = 'sample'){}
 
 setMethod('setRasclassData', signature(newdata = 'data.frame'),
 
-function(newdata, object = new('rasclass'), ncols = NA, nrows = NA, xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = -9999, samplename = 'sample'){
+function(newdata, object = new('rasclass'), ncols = NA, nrows = NA, xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = NA, samplename = 'sample'){
 	
 	# Set path
 	object@path <- 'Data specified manually using setRasclassData()'
@@ -16,18 +16,13 @@ function(newdata, object = new('rasclass'), ncols = NA, nrows = NA, xllcorner = 
 	# Remove data path
 	object@path <- as.character(NA)
 	
-	# Set up the gridSkeleton header
-	newgrid <- new('rasclassRaster')
-	newgrid@grid <- as.numeric(NA)
-	newgrid@NAvalue <- NAvalue
-		
-	if(!is.na(ncols)) 		newgrid@ncols     <- ncols
-	if(!is.na(nrows)) 		newgrid@nrows     <- nrows
-	if(!is.na(xllcorner)) 	newgrid@xllcorner <- xllcorner
-	if(!is.na(yllcorner)) 	newgrid@yllcorner <- yllcorner
-	if(!is.na(cellsize)) 	newgrid@cellsize  <- cellsize
-		
-	object@gridSkeleton <- newgrid
+	# Update the gridSkeleton
+	if(!is.na(NAvalue)) 	object@gridSkeleton@NAvalue   <- NAvalue
+	if(!is.na(ncols)) 		object@gridSkeleton@ncols     <- ncols
+	if(!is.na(nrows)) 		object@gridSkeleton@nrows     <- nrows
+	if(!is.na(xllcorner)) 	object@gridSkeleton@xllcorner <- xllcorner
+	if(!is.na(yllcorner)) 	object@gridSkeleton@yllcorner <- yllcorner
+	if(!is.na(cellsize)) 	object@gridSkeleton@cellsize  <- cellsize
 	
 	# Set up the gridSkeleton grid (NAhandle)
 	object@gridSkeleton@grid <- as.integer(unlist(apply(newdata[names(newdata) != samplename], 1, function(x) !is.element(NA, x))))

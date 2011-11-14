@@ -17,7 +17,7 @@ function(rasclassObj){
 	}
 	
 	# Calculate parameters of the multivariate normal distribution
-	cat('classifying... ')
+	cat('classifying...\n')
 	coefs <- list()
 	if(is.null(rasclassObj@training)){
 		byClass <- split(rasclassObj@data[, varlist], rasclassObj@data[, samplename])
@@ -34,14 +34,14 @@ function(rasclassObj){
 		# Calculate parameters of the multivariate normal distribution
 		prior <- log(nrow(frame)/samplesize)
 		meanVector  <- colMeans(frame)
-		determinant <- try(log(det(cov(frame))), silent = TRUE)
-		inverseCov <- try(solve(cov(frame)), silent = TRUE)
-		if(class(determinant) == 'try-error'){
-			determinant <- 0
+		classCov <- cov(frame)
+		if(sum(diag(classCov) == 0) != 0){
+			failnames <- names(diag(classCov))[diag(classCov) == 0]
+			warning('No variation of variable(s) "', paste(failnames, collapse = ', '), '" within class ', cat,'\n. Ignoring variable for prediction in this class.')
+			diag(classCov)[diag(classCov) == 0] <- 1
 		}
-		if(class(inverseCov) == 'try-error'){
-			inverseCov <- diag(0, nrow = ncol(frame))
-		}
+		determinant <- log(det(classCov))
+		inverseCov  <- solve(classCov)
 		coefs[[cat]] <- list(prior, determinant, meanVector, inverseCov)
 	}
 	rm(byClass)
@@ -59,6 +59,8 @@ function(rasclassObj){
 			probs[j] <- coefs[[j]][[1]] - coefs[[j]][[2]] - t(delta)%*%coefs[[j]][[4]]%*%delta
 		}
 		predicted[i] <- classes[probs==max(probs)]
+
+		if(i%%10000 == 1) cat('|')
 	}
 	
 	#Return predicted vector

@@ -20,31 +20,34 @@ function(path, samplename = 'sample', filenames = NULL, object = new('rasclass')
 	object@path <- path
 
 	# Read Variable Names
+	setwd(path)
 	if(length(filenames) == 0){
-		filelist <- Sys.glob(paste(path, '*.asc', sep=''))
-		filelist <- filelist[filelist != paste(path, object@samplename, '.asc' , sep='')]
+		filelist <- Sys.glob('*.asc')
+		filelist <- filelist[filelist != paste(object@samplename, '.asc' , sep='')]
 	}
 	else{
 		filelist <- NA
 		for(i in 1:length(filenames)){
 			file <- filenames[i]
 			if(substr(file, nchar(file)-3, nchar(file)) == '.asc'){
-				filelist[i] <- paste(path, file, sep='')
+				filelist[i] <- file
 			} else {
-				filelist[i] <- paste(path, file, '.asc', sep='')
+				filelist[i] <- paste(file, '.asc', sep='')
 			}
 		}
 	}
-	namelist <- rep('', length(filelist))
-	namelist[1] <- substr(filelist[1], nchar(path), nchar(filelist[1])-4)
+
+	# Store file names as names for data columns
+	namelist <- substr(filelist, 1, nchar(filelist)-4)
 	
 	# Load Sample
-	cat('\nReading Raster grids...\n')
-	cat(paste(paste(path,object@samplename,sep=''),'.asc',sep=''), '\n')
-	thissample  <- readRaster(paste(path, object@samplename, '.asc', sep=''), asInteger = asInteger)
+	cat('\nReading Raster grids from "', getwd(), '"\n', sep ='')
+	cat(paste(paste(object@samplename),'.asc',sep=''), '\n')
+
+	thissample  <- readRaster(paste(object@samplename, '.asc', sep=''), asInteger = asInteger)
 	object@data <- data.frame(thissample@grid)
 	
-	# Set gridSkeleton headers
+	# Set gridSkeleton headers 
 	object@gridSkeleton@ncols 		<- thissample@ncols
 	object@gridSkeleton@nrows 		<- thissample@nrows
 	object@gridSkeleton@xllcorner 	<- thissample@xllcorner
@@ -56,9 +59,8 @@ function(path, samplename = 'sample', filenames = NULL, object = new('rasclass')
 	# Load Dependent Varialbe Data using Filenames
 	for(i in 1:length(filelist)){
 		
-		# Communicate and store compact Namelist
+		# Communicate file to read
 		cat(filelist[i], '\n')
-		namelist[i] <- substr(filelist[i], nchar(object@path) + 1, nchar(filelist[i]) - 4)
 
 		# Load data from file
 		tempraster <- readRaster(filelist[i], asInteger = asInteger)

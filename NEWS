@@ -1,11 +1,8 @@
-rasclass 0.2.0
+rasclass 0.2.1
 ===========
 
- * The number of classification algorithms has been increased from two to five. The
-   additional methods are Neural Networks, Random Forests and Support Vector Machines.
- * The functions classifyMlogit() and classifyMLC() have been unified and extended
-   in the function classifyRasclass(). The classification algorithm can be chosen
-   using the optional argument 'method'.
- * The function setRasclassData() now allows to add data to a rasclass-class object
-   from data in a dataframe. In future updates, an integration with the 'raster'
-   package is planned.
+ * Fixed a bug in the Maximum Likelihood Classifier. Previously, zero variation of one
+   input variable over a class would set the classification probability of the whole
+   class to zero. In the corrected version the variable with no variation is ignored for
+   prediction of the corresponding class, but probabilities are not automatically zero.
+*  Added a progress bar to the Maximum Likelihood Classifier.

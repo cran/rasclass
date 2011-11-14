@@ -8,7 +8,7 @@ This function adds data from a dataframe to an existing \code{\link{rasclass-cla
 }
 
 \usage{setRasclassData(newdata, object = new('rasclass'), ncols = NA, nrows = NA,
-	xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = -9999,
+	xllcorner = NA, yllcorner = NA, cellsize = NA, NAvalue = NA,
 	samplename = 'sample')}
 
 \arguments{

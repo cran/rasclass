@@ -32,7 +32,7 @@ function(x, ...){
 	mymatrix <- t(apply(mymatrix, 1, rev))
 	X <-  x@xllcorner + x@cellsize * 1:x@ncols # Longitude
 	Y <-  x@yllcorner + x@cellsize * 1:x@nrows # Latitude
-	image(X, Y, mymatrix, col = rainbow(length(levels(factor(x@grid)))), useRaster = T, ...)
+	image(X, Y, mymatrix, col = rainbow(length(levels(factor(x@grid)))), ...)
 }
 )
 

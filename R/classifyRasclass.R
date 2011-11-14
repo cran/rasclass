@@ -59,7 +59,7 @@ function(rasclassObj, splitfraction = 1, method = 'logit', ...){
 	if(method == 'logit'){
 		cat('Classification using Multinomial Logistic Regression\n')
 
-		cat('classifying... ')
+		cat('classifying...\n')
 		if(splitfraction != 1){
 			rasclassObj@logit <- multinom(rasclassObj@formula, rasclassObj@data[training, ], ...)
 		} else {
@@ -77,7 +77,7 @@ function(rasclassObj, splitfraction = 1, method = 'logit', ...){
 	else if(method == 'randomForest'){
 		cat('Classification using Random Forest\n')
 
-		cat('classifying... ')
+		cat('classifying...\n')
 		if(splitfraction != 1){
 			rasclassObj@randomForest <- randomForest(as.formula(rasclassObj@formula), rasclassObj@data[training, ], ...)
 		} else {
@@ -94,7 +94,7 @@ function(rasclassObj, splitfraction = 1, method = 'logit', ...){
 	else if(method == 'supportVector'){
 		cat('Classification using Support Vector Machines\n')
 
-		cat('classifying...')
+		cat('classifying...\n')
 		if(splitfraction != 1){
 			rasclassObj@supportVector <- svm(as.formula(rasclassObj@formula), rasclassObj@data[training, ], ...)
 		} else {
@@ -115,7 +115,7 @@ function(rasclassObj, splitfraction = 1, method = 'logit', ...){
 		varlist <- strsplit(rasclassObj@formula,' ~ ', TRUE)[[1]]
 		varlist <- unlist(strsplit(as.character(varlist[2]),' + ', TRUE))
 
-		cat('classifying... ')
+		cat('classifying...\n')
 		if(splitfraction != 1){
 			classLabels <- matrix(0,
 				nrow = length(rasclassObj@data[training, rasclassObj@samplename]),
